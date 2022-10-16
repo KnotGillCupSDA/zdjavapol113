@@ -29,7 +29,8 @@ class FibonacciRecursiveTest {
 				arguments(6, 8),
 				arguments(7, 13),
 				arguments(18, 2584),
-				arguments(30, 832040)
+				arguments(30, 832040),
+				arguments(44, 701408733)
 		);
 	}
 }
