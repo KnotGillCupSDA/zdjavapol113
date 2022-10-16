@@ -1,11 +1,14 @@
 package com.sda.testingadvanced.parametrized.fibonacci;
 
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 import java.math.BigInteger;
 import java.util.stream.Stream;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -34,5 +37,17 @@ class FibonacciRecursiveTest {
 				arguments(44, BigInteger.valueOf(701408733)),
 				arguments(50, new BigInteger("12586269025"))
 		);
+	}
+
+	@Test
+	void shouldThrowsExceptionForNegativeNumbers() {
+		FibonacciRecursive fibonacci = new FibonacciRecursive();
+
+		// JUnit5
+		assertThrows(IllegalArgumentException.class, () -> fibonacci.getFibonacciNumber(-4));
+
+		//AssertJ
+		assertThatExceptionOfType(IllegalArgumentException.class)
+				.isThrownBy(() -> fibonacci.getFibonacciNumber(-4));
 	}
 }
