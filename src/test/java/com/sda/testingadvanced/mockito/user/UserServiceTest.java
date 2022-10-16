@@ -1,20 +1,20 @@
 package com.sda.testingadvanced.mockito.user;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
@@ -48,32 +48,31 @@ class UserServiceTest {
 	}
 
 	@Test
-	void shouldAddValidUser() {
+	void shouldAddUser() {
 		//given
-		final User user = new User(7L, "MockedName", "MockedLastName");
-		when(userValidator.isUserValid(user)).thenReturn(true);
+		long userId = 10L;
+		User user = new User(userId, "Tomasz", "Wozniak");
+
 		when(userRepository.addUser(user)).thenReturn(user);
+		when(userValidator.isUserValid(user)).thenReturn(true);
 
 		//when
-		final User addedUser = userService.addUser(user);
+		User expected = userService.addUser(user);
 
 		//then
-		assertNotNull(addedUser);
-		assertEquals(user, addedUser);
+		assertEquals(expected, user);
+		verify(userRepository, times(1)).addUser(user);
+		verify(userValidator, times(1)).isUserValid(user);
 	}
 
 	@Test
-	void shouldThrowsExceptionForInvalidUser() {
+	void shouldThrowExceptionAddUser() {
 		//given
-		final long id = 7L;
-		final User user = new User(id, "MockedName", "MockedLastName");
-		when(userValidator.isUserValid(user)).thenReturn(false);
-
-		//when, then
-		Assertions.assertThatExceptionOfType(IllegalArgumentException.class)
-				.isThrownBy(() -> userService.addUser(user))
-				.withMessageContaining(String.valueOf(id));
-
-		Mockito.verifyNoInteractions(userRepository);
+		long userId = 10L;
+		User user = new User(userId, "Tomasz", "Wozniak");
+		when(userValidator.isUserValid(any())).thenReturn(false);
+		//then
+		assertThrows(IllegalArgumentException.class, () -> userService.addUser(user));
+		verify(userValidator, times(1)).isUserValid(user);
 	}
 }
