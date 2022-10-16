@@ -48,11 +48,12 @@ class MeasurementConverterTest {
 	void someOperationsShouldBeReversible(ConversionType c1, ConversionType c2, double originalValue, String failureMessage) {
 		double actual = converter.convert(converter.convert(originalValue, c1), c2);
 
-		//assertEquals(originalValue, actual, failureMessage);
+		assertEquals(originalValue, actual, 0.001f, failureMessage);
 
+		/* assertJ equivalent
 		assertThat(actual)
 				.as(failureMessage)
-				.isCloseTo(originalValue, Percentage.withPercentage(0.001));
+				.isCloseTo(originalValue, Percentage.withPercentage(0.001));*/
 	}
 
 	public static Stream<Arguments> dataProvider() {
