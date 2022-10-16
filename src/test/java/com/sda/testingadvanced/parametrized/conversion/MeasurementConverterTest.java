@@ -43,8 +43,8 @@ class MeasurementConverterTest {
 		assertTrue(convert > value);
 	}
 
-	@ParameterizedTest(name="{index}: {3}")
-	@MethodSource("dataProvider")
+	@ParameterizedTest(name = "{index}: {3}")
+	@MethodSource(value = { "dataProvider", "cornerCases" })
 	void someOperationsShouldBeReversible(ConversionType c1, ConversionType c2, double originalValue, String failureMessage) {
 		double actual = converter.convert(converter.convert(originalValue, c1), c2);
 
@@ -60,24 +60,29 @@ class MeasurementConverterTest {
 				arguments(
 						ConversionType.CENTIMETERS_TO_INCHES,
 						ConversionType.INCHES_TO_CENTIMETERS,
-						1032849324.0001,
+						10.0,
 						"Centimeter to inches should be reversible"
 				),
 				arguments(
 						ConversionType.KILOMETERS_TO_MILES,
 						ConversionType.MILES_TO_KILOMETERS,
-						1,
-						"Kilometers to miles should be reversible"),
-				arguments(
-						ConversionType.KILOMETERS_TO_MILES,
-						ConversionType.MILES_TO_KILOMETERS,
-						1032849324.0001,
+						10.0,
 						"Kilometers to miles should be reversible"),
 				arguments(
 						ConversionType.METERS_TO_YARDS,
 						ConversionType.YARDS_TO_METERS,
-						1032849324.0001,
+						10.0,
 						"Meters to yards should be reversible")
+		);
+	}
+
+	public static Stream<Arguments> cornerCases() {
+		return Stream.of(
+				arguments(
+						ConversionType.KILOMETERS_TO_MILES,
+						ConversionType.MILES_TO_KILOMETERS,
+						1032849324.0001,
+						"Kilometers to miles should be reversible")
 		);
 	}
 }
