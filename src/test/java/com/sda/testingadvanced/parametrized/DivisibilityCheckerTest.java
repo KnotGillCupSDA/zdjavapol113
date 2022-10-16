@@ -3,7 +3,6 @@ package com.sda.testingadvanced.parametrized;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -20,11 +19,9 @@ class DivisibilityCheckerTest {
 		assertTrue(actual);
 	}
 
-	@Test
-	void shouldNotBeDivisibleBy3() {
-		//given
-		int number = 7;
-
+	@ParameterizedTest
+	@ValueSource(ints = {7, 11, -4, 82366795})
+	void shouldNotBeDivisibleBy3(int number) {
 		//when
 		boolean actual = DivisibilityChecker.isDivisibleBy3(number);
 
